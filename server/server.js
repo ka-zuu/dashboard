@@ -151,7 +151,14 @@ const start = async () => {
                 const plugin = plugins.find(p => p.meta.id === widget.pluginId);
                 if (plugin && plugin.getData) {
                     try {
-                        const settings = typeof widget.settings === 'string' ? JSON.parse(widget.settings || '{}') : widget.settings;
+                        let settings = {};
+                        try {
+                            settings = typeof widget.settings === 'string' ? JSON.parse(widget.settings || '{}') : widget.settings;
+                        } catch (e) {
+                            console.error(`Invalid JSON settings for widget ${widget.id}, using default:`, e);
+                            settings = {};
+                        }
+
                         const data = await plugin.getData(settings);
                         io.emit('update', {
                             type: widget.pluginId,

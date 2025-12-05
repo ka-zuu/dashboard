@@ -61,9 +61,13 @@ function App() {
         socket.on('update', (data) => {
             // data structure: { type, widgetId, data }
             if (data.widgetId) {
+                // Server sends { type, widgetId, data: { type, data: { ... } } }
+                // We want the inner data object
+                const widgetContent = data.data?.data || data.data;
+
                 setWidgetData(prev => ({
                     ...prev,
-                    [data.widgetId]: data.data
+                    [data.widgetId]: widgetContent
                 }));
             }
         });
