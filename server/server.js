@@ -115,7 +115,7 @@ const prisma = new PrismaClient();
 const plugins = [];
 
 // Load plugins
-const loadPlugins = async () => {
+export const loadPlugins = async () => {
     const pluginsDir = path.join(__dirname, 'plugins');
     if (!fs.existsSync(pluginsDir)) return;
 
@@ -173,4 +173,8 @@ const start = async () => {
     });
 };
 
-start();
+if (process.env.NODE_ENV !== 'test') {
+    start();
+}
+
+export { app };
